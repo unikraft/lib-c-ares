@@ -1,0 +1,125 @@
+#  libcares Makefile.uk
+#
+#  Authors: Felipe Huici <felipe.huici@neclab.eu>
+#
+#
+#  Copyright (c) 2019, NEC Europe Ltd., NEC Corporation. All rights reserved.
+#
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions
+#  are met:
+#
+#  1. Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+#  3. Neither the name of the copyright holder nor the names of its
+#     contributors may be used to endorse or promote products derived from
+#     this software without specific prior written permission.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+#
+#  THIS HEADER MAY NOT BE EXTRACTED OR MODIFIED IN ANY WAY.
+#
+
+################################################################################
+# Library registration
+################################################################################
+$(eval $(call addlib_s,libcares,$(CONFIG_LIBCARES)))
+
+#ifeq ($(CONFIG_LIBCARES),y)
+#ifneq ($(LWIP_IPV6),y)
+#$(error cares requires lwip's ipv6 option to be enabled)
+#endif
+#endif
+
+################################################################################
+# Sources
+################################################################################
+LIBCARES_VERSION=1.14.0
+LIBCARES_URL=https://c-ares.haxx.se/download/c-ares-$(LIBCARES_VERSION).tar.gz
+LIBCARES_DIR=c-ares-$(LIBCARES_VERSION)
+
+LIBCARES_PATCHDIR=$(LIBCARES_BASE)/patches
+$(eval $(call fetch,libcares,$(LIBCARES_URL),$(LIBCARES_VERSION).tar.gz))
+$(eval $(call patch,libcares,$(LIBCARES_PATCHDIR),$(LIBCARES_DIR)))
+
+################################################################################
+# Helpers
+################################################################################
+LIBCARES=$(LIBCARES_ORIGIN)/$(LIBCARES_DIR)
+
+################################################################################
+# Library includes
+################################################################################
+CINCLUDES-$(CONFIG_LIBCARES) += -I$(LIBCARES_BASE)/include \
+  			        -I$(LIBCARES)
+
+################################################################################
+# Global flags
+################################################################################
+LIBCARES_CFLAGS-y += -DHAVE_CONFIG_H -DHAVE_NETINET_IN_H
+
+################################################################################
+# Sources
+################################################################################
+LIBCARES_SRCS-y += $(LIBCARES)/ares_mkquery.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_nowarn.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_android.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_timeout.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_parse_ns_reply.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_getnameinfo.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_fds.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_parse_mx_reply.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_free_string.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_parse_ptr_reply.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_llist.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares__close_sockets.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_expand_string.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_strdup.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_search.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_send.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares__timeval.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_getenv.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_writev.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_version.c
+LIBCARES_SRCS-y += $(LIBCARES)/bitncmp.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_getopt.c
+LIBCARES_SRCS-y += $(LIBCARES)/inet_ntop.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares__read_line.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_parse_srv_reply.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_strerror.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_data.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_create_query.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_getsock.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_gethostbyaddr.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_parse_naptr_reply.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_process.c
+LIBCARES_SRCS-y += $(LIBCARES)/inet_net_pton.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_strcasecmp.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_free_hostent.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_cancel.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_query.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares__get_hostent.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_options.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_parse_soa_reply.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_parse_a_reply.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_destroy.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_init.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_parse_txt_reply.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_expand_name.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_parse_aaaa_reply.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_platform.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_gethostbyname.c
+LIBCARES_SRCS-y += $(LIBCARES)/ares_library_init.c
