@@ -1,4 +1,4 @@
-libzlib for Unikraft
+c-ares for Unikraft
 ===================
 This is a port of c-ares to Unikraft. You will need newlib and lwip
 for it to work, so please ensure you add the following line to the
